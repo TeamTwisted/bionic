@@ -16,6 +16,8 @@ libm_common_src_files += \
     upstream-freebsd/lib/msun/bsdsrc/b_exp.c \
     upstream-freebsd/lib/msun/bsdsrc/b_log.c \
     upstream-freebsd/lib/msun/bsdsrc/b_tgamma.c \
+    upstream-freebsd/lib/msun/src/catrig.c \
+    upstream-freebsd/lib/msun/src/catrigf.c \
     upstream-freebsd/lib/msun/src/e_acos.c \
     upstream-freebsd/lib/msun/src/e_acosf.c \
     upstream-freebsd/lib/msun/src/e_acosh.c \
@@ -80,6 +82,7 @@ libm_common_src_files += \
     upstream-freebsd/lib/msun/src/s_atanf.c \
     upstream-freebsd/lib/msun/src/s_carg.c \
     upstream-freebsd/lib/msun/src/s_cargf.c \
+    upstream-freebsd/lib/msun/src/s_cargl.c \
     upstream-freebsd/lib/msun/src/s_cbrt.c \
     upstream-freebsd/lib/msun/src/s_cbrtf.c \
     upstream-freebsd/lib/msun/src/s_ccosh.c \
@@ -90,20 +93,25 @@ libm_common_src_files += \
     upstream-freebsd/lib/msun/src/s_cexpf.c \
     upstream-freebsd/lib/msun/src/s_cimag.c \
     upstream-freebsd/lib/msun/src/s_cimagf.c \
+    upstream-freebsd/lib/msun/src/s_cimagl.c \
     upstream-freebsd/lib/msun/src/s_conj.c \
     upstream-freebsd/lib/msun/src/s_conjf.c \
+    upstream-freebsd/lib/msun/src/s_conjl.c \
     upstream-freebsd/lib/msun/src/s_copysign.c \
     upstream-freebsd/lib/msun/src/s_copysignf.c \
     upstream-freebsd/lib/msun/src/s_cos.c \
     upstream-freebsd/lib/msun/src/s_cosf.c \
     upstream-freebsd/lib/msun/src/s_cproj.c \
     upstream-freebsd/lib/msun/src/s_cprojf.c \
+    upstream-freebsd/lib/msun/src/s_cprojl.c \
     upstream-freebsd/lib/msun/src/s_creal.c \
     upstream-freebsd/lib/msun/src/s_crealf.c \
+    upstream-freebsd/lib/msun/src/s_creall.c \
     upstream-freebsd/lib/msun/src/s_csinh.c \
     upstream-freebsd/lib/msun/src/s_csinhf.c \
     upstream-freebsd/lib/msun/src/s_csqrt.c \
     upstream-freebsd/lib/msun/src/s_csqrtf.c \
+    upstream-freebsd/lib/msun/src/s_csqrtl.c \
     upstream-freebsd/lib/msun/src/s_ctanh.c \
     upstream-freebsd/lib/msun/src/s_ctanhf.c \
     upstream-freebsd/lib/msun/src/s_erf.c \
@@ -169,6 +177,7 @@ libm_common_src_files += \
     upstream-freebsd/lib/msun/src/s_truncf.c \
     upstream-freebsd/lib/msun/src/w_cabs.c \
     upstream-freebsd/lib/msun/src/w_cabsf.c \
+    upstream-freebsd/lib/msun/src/w_cabsl.c \
     upstream-freebsd/lib/msun/src/w_drem.c \
     upstream-freebsd/lib/msun/src/w_dremf.c \
 
@@ -176,7 +185,7 @@ libm_common_src_files += \
     fake_long_double.c \
     signbit.c \
 
-libm_ld_src_files = \
+libm_ld128_src_files = \
     upstream-freebsd/lib/msun/src/e_acosl.c \
     upstream-freebsd/lib/msun/src/e_acoshl.c \
     upstream-freebsd/lib/msun/src/e_asinl.c \
@@ -220,7 +229,7 @@ libm_ld_src_files = \
     upstream-freebsd/lib/msun/src/s_tanl.c \
     upstream-freebsd/lib/msun/src/s_truncl.c \
 
-libm_ld_src_files += \
+libm_ld128_src_files += \
     upstream-freebsd/lib/msun/ld128/invtrig.c \
     upstream-freebsd/lib/msun/ld128/e_lgammal_r.c \
     upstream-freebsd/lib/msun/ld128/k_cosl.c \
@@ -293,7 +302,7 @@ endif
 
 LOCAL_C_INCLUDES_arm64 := $(libm_ld_includes)
 LOCAL_SRC_FILES_arm64 := \
-    arm64/fenv.c $(libm_ld_src_files) \
+    arm64/fenv.c $(libm_ld128_src_files) \
     upstream-freebsd/lib/msun/src/e_sqrt.c \
     upstream-freebsd/lib/msun/src/e_sqrtf.c \
     upstream-freebsd/lib/msun/src/s_floor.c
@@ -307,7 +316,7 @@ LOCAL_SRC_FILES_x86 := \
 
 LOCAL_C_INCLUDES_x86_64 := $(libm_ld_includes)
 LOCAL_SRC_FILES_x86_64 := \
-    amd64/fenv.c $(libm_ld_src_files) \
+    amd64/fenv.c $(libm_ld128_src_files) \
     upstream-freebsd/lib/msun/src/e_sqrt.c \
     upstream-freebsd/lib/msun/src/e_sqrtf.c \
     upstream-freebsd/lib/msun/src/s_floor.c
@@ -320,7 +329,7 @@ LOCAL_SRC_FILES_mips := \
 
 LOCAL_C_INCLUDES_mips64 := $(libm_ld_includes)
 LOCAL_SRC_FILES_mips64 := \
-    mips/fenv.c $(libm_ld_src_files) \
+    mips/fenv.c $(libm_ld128_src_files) \
     upstream-freebsd/lib/msun/src/e_sqrt.c \
     upstream-freebsd/lib/msun/src/e_sqrtf.c \
     upstream-freebsd/lib/msun/src/s_floor.c
