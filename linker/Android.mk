@@ -31,7 +31,7 @@ LOCAL_CFLAGS += \
     -Wall -Wextra -Wunused -Werror \
 
 LOCAL_CONLYFLAGS += \
-    -std=gnu99 \
+    -std=gnu11 \
 
 LOCAL_CPPFLAGS += \
     -std=gnu++11 \
