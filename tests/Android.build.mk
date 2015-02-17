@@ -34,7 +34,8 @@ ifeq ($($(module)_install_to_out_data),true)
 endif
 endif
 
-LOCAL_CLANG := $($(module)_clang_$(build_type))
+#LOCAL_CLANG := $($(module)_clang_$(build_type))
+LOCAL_CLANG := false
 
 LOCAL_FORCE_STATIC_EXECUTABLE := $($(module)_force_static_executable)
 
