@@ -34,7 +34,8 @@ ifeq ($($(module)_install_to_out_data),true)
 endif
 endif
 
-LOCAL_CLANG := $($(module)_clang_$(build_type))
+#LOCAL_CLANG := $($(module)_clang_$(build_type))
+LOCAL_CLANG := false
 
 ifneq ($($(module)_allow_asan),true)
 LOCAL_ADDRESS_SANITIZER := false
