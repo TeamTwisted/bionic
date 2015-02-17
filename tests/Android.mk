@@ -178,8 +178,9 @@ include $(LOCAL_PATH)/Android.build.mk
 build_type := host
 include $(LOCAL_PATH)/Android.build.mk
 
-fortify1-tests-clang_clang_target := true
-fortify1-tests-clang_cflags_host := -D__clang__
+fortify1-tests-clang_clang_target := false
+fortify1-tests-clang_cflags_host := 
+#-D__clang__
 
 module := fortify1-tests-clang
 module_tag := optional
@@ -189,9 +190,10 @@ include $(LOCAL_PATH)/Android.build.mk
 build_type := host
 include $(LOCAL_PATH)/Android.build.mk
 
-fortify2-tests-clang_clang_target := true
+fortify2-tests-clang_clang_target := false
 
-fortify2-tests-clang_cflags_host := -D__clang__
+fortify2-tests-clang_cflags_host := 
+# -D__clang__
 
 module := fortify2-tests-clang
 module_tag := optional
