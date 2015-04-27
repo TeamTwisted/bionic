@@ -136,7 +136,7 @@ ENTRY(floor)    /* x in r0, r1 */
 
 END(floor)
 
-#if LDBL_MANT_DIG == 53
+#if (__LDBL_MANT_DIG__) == 53
         .weak           floorl
         .equ            floorl,floor
 #endif
