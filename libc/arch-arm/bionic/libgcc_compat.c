@@ -22,6 +22,7 @@ extern char __aeabi_f2d;
 extern char __aeabi_f2iz;
 extern char __aeabi_f2uiz;
 extern char __aeabi_fadd;
+extern char __aeabi_fcmpgt;
 extern char __aeabi_fcmpun;
 extern char __aeabi_fdiv;
 extern char __aeabi_fmul;
@@ -101,6 +102,7 @@ void* __bionic_libgcc_compat_symbols[] = {
     &__aeabi_f2iz,
     &__aeabi_f2uiz,
     &__aeabi_fadd,
+    &__aeabi_fcmpgt,
     &__aeabi_fcmpun,
     &__aeabi_fdiv,
     &__aeabi_fmul,
