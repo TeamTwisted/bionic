@@ -7,6 +7,7 @@ extern char __aeabi_cdcmple;
 extern char __aeabi_cdrcmple;
 extern char __aeabi_d2f;
 extern char __aeabi_d2iz;
+extern char __aeabi_d2uiz;
 extern char __aeabi_dadd;
 extern char __aeabi_dcmpeq;
 extern char __aeabi_dcmpge;
@@ -87,6 +88,7 @@ void* __bionic_libgcc_compat_symbols[] = {
     &__aeabi_cdrcmple,
     &__aeabi_d2f,
     &__aeabi_d2iz,
+    &__aeabi_d2uiz,
     &__aeabi_dadd,
     &__aeabi_dcmpeq,
     &__aeabi_dcmpge,
