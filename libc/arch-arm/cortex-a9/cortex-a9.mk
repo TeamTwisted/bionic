@@ -14,3 +14,6 @@ libc_bionic_src_files_arm += \
 
 libc_bionic_src_files_arm += \
     arch-arm/denver/bionic/memmove.S \
+
+libc_common_cflags_arm += \
+    -DHAVE_32_BYTE_CACHE_LINE
