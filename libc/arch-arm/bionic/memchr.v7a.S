@@ -95,7 +95,7 @@ ENTRY(memchr)
 	movs	r3, #0
 
 15:
-	ldmia	r0!,{r5,r6}
+	ldrd	r5,r6,[r0],#8
 	subs	r4, r4, #8
 	eor	r5,r5, r1	@ Get it so that r5,r6 have 00's where the bytes match the target
 	eor	r6,r6, r1
