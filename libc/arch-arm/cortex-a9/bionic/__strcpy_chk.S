@@ -51,7 +51,7 @@ ENTRY(__strcpy_chk)
 
     .p2align 2
 .L_mainloop:
-    ldmia   r0!, {r2, r3}
+    ldrd    r2, r3, [r0], #8
 
     pld     [r0, #64]
 

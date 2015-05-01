@@ -164,7 +164,7 @@ strcpy_check_src_align:
 
     .p2align 2
 strcpy_mainloop:
-    ldmia   r1!, {r2, r3}
+    ldrd    r2, r3, [r1], #8
 
     pld     [r1, #64]
 

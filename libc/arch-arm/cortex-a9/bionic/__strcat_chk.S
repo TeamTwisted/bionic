@@ -65,7 +65,7 @@ ENTRY(__strcat_chk)
 
     .p2align 2
 .L_mainloop:
-    ldmia   r1!, {r2, r3}
+    ldrd    r2, r3, [r1], #8
 
     pld     [r1, #64]
 
