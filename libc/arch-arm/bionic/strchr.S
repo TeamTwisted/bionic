@@ -1,77 +1,115 @@
-/* Copyright (c) 2010-2011, Linaro Limited
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-      * Redistributions of source code must retain the above copyright
-      notice, this list of conditions and the following disclaimer.
-
-      * Redistributions in binary form must reproduce the above copyright
-      notice, this list of conditions and the following disclaimer in the
-      documentation and/or other materials provided with the distribution.
-
-      * Neither the name of Linaro Limited nor the names of its
-      contributors may be used to endorse or promote products derived
-      from this software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-   HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
-/*
-   Written by Dave Gilbert <david.gilbert@linaro.org>
-
-   A very simple strchr routine, from benchmarks on A9 it's a bit faster than
-   the current version in eglibc (2.12.1-0ubuntu14 package)
-   I don't think doing a word at a time version is worth it since a lot
-   of strchr cases are very short anyway.
-
+/*-
+ * Copyright (c) 2013 The NetBSD Foundation, Inc.
+ * All rights reserved.
+ *
+ * This code is derived from software contributed to The NetBSD Foundation
+ * by Matt Thomas of 3am Software Foundry.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
+ * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS
+ * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include <machine/cpu-features.h>
 #include <private/bionic_asm.h>
 
+#ifndef __ARMEB__
+#define	BYTE0	0x000000ff
+#define	BYTE1	0x0000ff00
+#define	BYTE2	0x00ff0000
+#define	BYTE3	0xff000000
+#define	lshi	lsl
+#define	lshis	lsls
+#else
+#define	BYTE0	0xff000000
+#define	BYTE1	0x00ff0000
+#define	BYTE2	0x0000ff00
+#define	BYTE3	0x000000ff
+#define	lshi	lsr
+#define	lshis	lsrs
+#endif
+
 	.syntax unified
-	.arch armv7-a
+	.arch	armv7-a
 
 	.thumb
-
-@ ---------------------------------------------------------------------------
-
 	.thumb_func
-	.p2align 4,,15
+
 ENTRY(strchr)
-	@ r0 = start of string
-	@ r1 = character to match
-	@ returns NULL for no match, or a pointer to the match
-	and	r1,r1, #255
+	and	r2, r1, #0xff		/* restrict to byte value */
+1:	tst	r0, #3			/* test for word alignment */
+	beq	.Lpre_main_loop		/*   finally word aligned */
+	ldrb	r3, [r0], #1		/* load a byte */
+	cmp	r3, r2			/* is it a match? */
+	beq	2f			/*   yes, return current ptr - 1 */
+	cmp	r3, #0			/* no, was it 0? */
+	bne	1b			/*   no, try next byte */
+	movs	r0, #0			/*   yes, set return value to NULL */
+	bx	lr				/* return */
+2:	subs	r0, r0, #1		/* back up by one */
+	bx	lr				/* return */
+.Lpre_main_loop:
+	movw	ip, #0xfefe		/* magic constant; 254 in each byte */
+	movt	ip, #0xfefe		/* magic constant; 254 in each byte */
+	orr	r2, r2, r2, lsl #8	/* move to next byte */
+	orr	r2, r2, r2, lsl #16	/* move to next halfword */
+.Lmain_loop:
+	ldr	r3, [r0], #4		/* load next word */
+	/*
+	 * Add 254 to each byte using the UQADD8 (unsigned saturating add 8)
+	 * instruction.  For every non-NUL byte, the result for that byte will
+	 * become 255.  For NUL, it will be 254.  When we complement the
+	 * result, if the result is non-0 then we must have encountered a NUL.
+	 */
+	uqadd8	r1, r3, ip		/* NUL detection happens here */
+	eors	r3, r3, r2		/* xor to clear each lane */
+	uqadd8	r3, r3, ip		/* char detection happens here */
+	ands	r3, r3, r1		/* merge results */
+	mvns	r3, r3			/* is the complement non-0? */
+	beq	.Lmain_loop		/*    no, then keep going */
 
-1:
-	ldrb	r2,[r0],#1
-	cmp	r2,r1
-	cbz	r2,10f
-	bne	1b
-
-	@ We're here if it matched
-5:
-	subs    r0,r0,#1
-	bx      lr
-
-10:
-	@ We're here if we ran off the end
-	cmp	r1, #0  @ Corner case - you're allowed to search for the nil and get a pointer to it
-	beq	5b      @ A bit messy, if it's common we should branch at the start to a special loop
-	mov	r0,#0
+	/*
+	 * We've encountered a NUL or a match but we don't know which happened
+	 * first.
+	 */
+	cmp	r2, #0			/* searching for NUL? */
+	beq	.Lfind_match		/*   yes, find the match */
+	mvns	r1, r1			/* did we encounter a NUL? */
+	beq	.Lfind_match		/*   no, find the match */
+	bics	r3, r3, r1		/* clear match for the NUL(s) */
+	beq	.Lnomatch		/*   any left set? if not, no match */
+	lshis	r1, r1, #8		/* replicate NUL bit to other bytes */
+	itt	ne
+	orrne	r1, r1, r1, lshi #8	/* replicate NUL bit to other bytes */
+	orrne	r1, r1, r1, lshi #8	/* replicate NUL bit to other bytes */
+	bics	r3, r3, r1		/* clear any match bits after the NUL */
+	beq	.Lnomatch		/*   any left set? if not, no match */
+.Lfind_match:
+#ifndef __ARMEB__
+	rev	r3, r3			/* we want this in BE for the CLZ */
+#endif
+	clz	r3, r3			/* count how many leading zeros */
+	add	r0, r0, r3, lsr #3	/* divide that by 8 and add to count */
+	subs	r0, r0, #4		/* compensate for the post-inc */
+	bx	lr
+.Lnomatch:
+	movs	r0, #0
 	bx	lr
 END(strchr)
