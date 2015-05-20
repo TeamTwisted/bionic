@@ -120,6 +120,7 @@ libc_bionic_src_files := \
     bionic/flockfile.cpp \
     bionic/fork.cpp \
     bionic/fpclassify.cpp \
+    bionic/ftruncate.cpp \
     bionic/futimens.cpp \
     bionic/getauxval.cpp \
     bionic/getcwd.cpp \
