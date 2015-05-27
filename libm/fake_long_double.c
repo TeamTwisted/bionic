@@ -24,12 +24,16 @@
  * that call the regular "double" function.
  */
 
+long double atanl(long double a1) { return atan(a1); }
+long double expl(long double a1) { return exp(a1); }
 long double copysignl(long double a1, long double a2) { return copysign(a1, a2); }
 long double fabsl(long double a1) { return fabs(a1); }
+long double fmal(long double a1, long double a2, long double a3) { return fma(a1, a2, a3); }
 long double fmaxl(long double a1, long double a2) { return fmax(a1, a2); }
 long double fmodl(long double a1, long double a2) { return fmod(a1, a2); }
 long double fminl(long double a1, long double a2) { return fmin(a1, a2); }
 int ilogbl(long double a1) { return ilogb(a1); }
+long double logl(long double a1) { return log(a1); }
 long long llrintl(long double a1) { return llrint(a1); }
 long lrintl(long double a1) { return lrint(a1); }
 long long llroundl(long double a1) { return llround(a1); }
