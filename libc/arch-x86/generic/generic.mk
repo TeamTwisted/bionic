@@ -36,9 +36,9 @@ libc_bionic_src_files_x86 += \
     arch-x86/generic/string/strcat.S \
     upstream-freebsd/lib/libc/string/wcscpy.c \
     upstream-freebsd/lib/libc/string/wcscat.c \
-    upstream-openbsd/lib/libc/string/strlcat.c \
-    upstream-openbsd/lib/libc/string/strlcpy.c \
-    upstream-openbsd/lib/libc/string/strncat.c
+    upstream-darwin/lib/libc/string/strlcat.c \
+    upstream-darwin/lib/libc/string/strlcpy.c \
+    upstream-darwin/lib/libc/string/strncat.c
 endif
 
 ifeq ($(ARCH_X86_HAVE_SSE4),true)

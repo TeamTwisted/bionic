@@ -673,6 +673,29 @@ LOCAL_SYSTEM_SHARED_LIBRARIES :=
 $(eval $(call patch-up-arch-specific-flags,LOCAL_CFLAGS,libc_common_cflags))
 include $(BUILD_STATIC_LIBRARY)
 
+# ========================================================
+# libc_darwin.a - upstream Darwin C library code
+# ========================================================
+
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES := $(libc_upstream_darwin_src_files)
+
+LOCAL_CFLAGS := \
+    $(libc_common_cflags) \
+    -Wno-sign-compare -Wno-uninitialized -Wno-unused-parameter
+
+LOCAL_CONLYFLAGS := $(libc_common_conlyflags)
+LOCAL_CPPFLAGS := $(libc_common_cppflags)
+LOCAL_C_INCLUDES := $(libc_common_c_includes)
+LOCAL_MODULE := libc_darwin
+LOCAL_ADDITIONAL_DEPENDENCIES := $(libc_common_additional_dependencies)
+LOCAL_SYSTEM_SHARED_LIBRARIES :=
+
+$(eval $(call patch-up-arch-specific-flags,LOCAL_CFLAGS,libc_common_cflags))
+$(eval $(call patch-up-arch-specific-flags,LOCAL_SRC_FILES,libc_darwin_src_files))
+include $(BUILD_STATIC_LIBRARY)
+
 
 # ========================================================
 # libc_freebsd.a - upstream FreeBSD C library code
@@ -913,6 +936,7 @@ LOCAL_CLANG := $(use_clang)
 LOCAL_ADDITIONAL_DEPENDENCIES := $(libc_common_additional_dependencies)
 LOCAL_WHOLE_STATIC_LIBRARIES := \
     libc_bionic \
+    libc_darwin \
     libc_cxa \
     libc_dns \
     libc_freebsd \
