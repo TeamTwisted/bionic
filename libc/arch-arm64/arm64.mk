@@ -9,7 +9,6 @@ libc_bionic_src_files_arm64 += \
     bionic/__strcpy_chk.cpp \
     bionic/__strcat_chk.cpp \
     bionic/memrchr.c \
-    bionic/strrchr.cpp \
 
 libc_darwin_src_files_arm64 += \
     upstream-darwin/lib/libc/string/stpncpy.c \
