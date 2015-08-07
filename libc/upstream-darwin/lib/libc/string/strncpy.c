@@ -23,20 +23,10 @@
 
 #include <string.h>
 
-char *
-strncpy(char * restrict dst, const char * restrict src, size_t maxlen) {
-    const size_t srclen = strnlen(src, maxlen);
-    if (srclen < maxlen) {
-        //  The stpncpy() and strncpy() functions copy at most maxlen
-        //  characters from src into dst.
-        memcpy(dst, src, srclen);
-        //  If src is less than maxlen characters long, the remainder
-        //  of dst is filled with '\0' characters.
-        memset(dst+srclen, 0, maxlen-srclen);
-    } else {
-        //  Otherwise, dst is not terminated.
-        memcpy(dst, src, maxlen);
-    }
-    //  The strcpy() and strncpy() functions return dst.
-    return dst;
+char * strncpy (char *s1, const char *s2, size_t n)
+{
+  size_t size = strnlen (s2, n);
+  if (size != n)
+    memset (s1 + size, '\0', n - size);
+  return memcpy (s1, s2, size);
 }
