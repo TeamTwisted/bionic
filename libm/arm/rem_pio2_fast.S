@@ -38,10 +38,6 @@
 
 #define reti	r0
 
-	.fpu    vfpv4
-#define MLAF64	vfma.f64
-#define MLSF64	vfms.f64
-
 ENTRY(__rem_pio2_fast)		/* x in d0 & r0, r1. Return y0, y1 in d2, d3. Return n in r0. */
 
 	bic		abs_ixh, ixh, #0x80000000
@@ -66,7 +62,7 @@ __medium:
 	adr		ip, .Linvpio2
 	vldmia		ip, {t3-fn}
 	vmov.f64	t0, fn
-	MLAF64		fn, x, t3
+	vmla.f64		fn, x, t3
 	vsub.f64	fn, fn, t0
 
 	/* j = ix >> 20; */
@@ -80,7 +76,7 @@ __medium:
 	/* w = fn * pio2_1t; */
 	adr		ip, .Lpio2_1
 	vldmia		ip, {t0-t1}
-	MLSF64		x, fn, t0
+	vmls.f64		x, fn, t0
 	vmul.f64	w, fn, t1
 
 __1st_round:

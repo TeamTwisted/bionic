@@ -32,10 +32,6 @@
 #define t0	d23
 #define hz	d24
 
-	.fpu	vfpv4
-#define MLAF64	vfma.f64
-#define MLSF64	vfms.f64
-
 ENTRY_PRIVATE(__kernel_cos_fast)	/* x in d2, y in d3 */
 
 	/* z = x^2; */
@@ -52,19 +48,19 @@ calc_r:
 	vldmia		ip, {C2-C4}
 
 	/* C2 += z*C3; || C5 += z*C6; */
-	MLAF64		C2, z, C3
-	MLAF64		C5, z, C6
+	vmla.f64		C2, z, C3
+	vmla.f64		C5, z, C6
 
 	/* C1 += z*C2; || C4 += z*C5; */
-	MLAF64		C1, z, C2
-	MLAF64		C4, z, C5
+	vmla.f64		C1, z, C2
+	vmla.f64		C4, z, C5
 
 	/* r = z*C1; || t0 = w*C4; */
 	vmul.f64	r, z, C1
 	vmul.f64	t0, w, C4
 
 	/* r += t0*w */
-	MLAF64		r, t0, w
+	vmla.f64		r, t0, w
 
 	/* hz = 0.5*z; */
 	vmov.f64	hz, #0.5
@@ -80,7 +76,7 @@ calc_r:
 
 	/* z = z*r-x*y; */
 	vmul.f64	z, z, r
-	MLSF64		z, x, y
+	vmls.f64		z, x, y
 
 	/* ret = w+(t0+z); */
 	vadd.f64	t0, t0, z

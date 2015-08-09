@@ -34,10 +34,6 @@
 #define r	d21
 #define t0	d22
 
-	.fpu	vfpv4
-#define MLAF64	vfma.f64
-#define MLSF64	vfms.f64
-
 ENTRY_PRIVATE(__kernel_sin_fast)	/* x in d2, y in d3, iy in r0 */
 
 	/* z = x^2; */
@@ -55,14 +51,14 @@ calc_r:
 	vldmia		ip, {S3-S2}
 
 	/* S3 += z*S4; || S5 += z*S6; */
-	MLAF64		S3, z, S4
-	MLAF64		S5, z, S6
+	vmla.f64		S3, z, S4
+	vmla.f64		S5, z, S6
 
 	/* S3 += w*S5 */
-	MLAF64		S3, w, S5
+	vmla.f64		S3, w, S5
 
 	/* r = S2 = S2+z*S3 */
-	MLAF64		r, z, S3
+	vmla.f64		r, z, S3
 
 	/* iy == 0? */
 	cmp		r0, #0
@@ -73,11 +69,11 @@ __tail_is_zero:
 	/* ret = x+v*(S1+z*r); */
 
 	/* S1 += z*r; */
-	MLAF64		S1, z, r
+	vmla.f64		S1, z, r
 
 	/* ret = x+v*S1 */
 	vmov.f64	ret, x
-	MLAF64		ret, v, S1
+	vmla.f64		ret, v, S1
 
 	vmov		r0, r1, ret
 	bx		lr
@@ -93,13 +89,13 @@ __tail_is_not_zero:
 	vmul.f64	t0, t0, y
 
 	/* t0 -= v*r; */
-	MLSF64		t0, v, r
+	vmls.f64		t0, v, r
 
 	/* y -= t0*z; */
-	MLSF64		y, t0, z
+	vmls.f64		y, t0, z
 
 	/* y += v*S1; */
-	MLAF64		y, v, S1
+	vmla.f64		y, v, S1
 
 	/* ret = x+y; */
 	vadd.f64	ret, x, y

@@ -72,10 +72,6 @@
 #define log2a		d24
 #define a_recp		d25
 
-	.fpu	vfpv4
-#define MLAF64		vfma.f64
-#define MLSF64		vfms.f64
-
 ENTRY_PRIVATE(__kernel_log2)	/* x in d0 and r0/r1, 1.0 <= x < 2.0 */
 
 lookup:
@@ -103,18 +99,18 @@ taylor_series_expanding:
 	vmul.f64	dx2, dx, dx
 	adr		ip, .Ls6
 	vldmia		ip, {t6-t1}
-	MLAF64	t5, t6, dx
+	vmla.f64	t5, t6, dx
 	/* S5 + S6 * dx */
-	MLAF64	t3, t4, dx
+	vmla.f64	t3, t4, dx
 	/* S3 + S4 * dx */
-	MLAF64	t1, t2, dx
+	vmla.f64	t1, t2, dx
 	/* S1 + S2 * dx */
-	MLAF64	t3, t5, dx2
+	vmla.f64	t3, t5, dx2
 	/* S3 + S4 * dx + (S5 + S6 * dx) * dx^2 */
-	MLAF64	t1, t3, dx2
+	vmla.f64	t1, t3, dx2
 	/* S1 + S2 * dx +
            (S3 + S4 * dx + (S5 + S6 * dx) * dx^2) * dx^2 */
-	MLAF64	ret, t1, dx
+	vmla.f64	ret, t1, dx
 	/* log2(a) + (S1 + S2 * dx + (S3 + S4 * dx^2 +
 	(S5 + S6 * dx^2) * dx^2) * dx^2) * dx */
 	bx		lr
