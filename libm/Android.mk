@@ -285,7 +285,6 @@ else
 LOCAL_SRC_FILES_arm += \
     arm/atan.S \
     arm/cos.S \
-    arm/cos_kernel.S \
     arm/exp.S \
     arm/fabs.S \
     arm/floor.S \
@@ -295,12 +294,10 @@ LOCAL_SRC_FILES_arm += \
     arm/lrint.S \
     arm/pow.S \
     arm/pow2_kernel.S \
-    arm/rem_pio2_fast.S \
     arm/rem_pio2_kernel.S \
-    arm/rem_pio2_large.c \
     arm/sin.S \
-    arm/sin_kernel.S \
     arm/sqrt.S \
+
 endif
 
 LOCAL_CFLAGS_arm += -fno-if-conversion

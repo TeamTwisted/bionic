@@ -645,3 +645,5 @@ taylor_series_expanding:
 	.word	0x00000000, 0x3ff00000, 0x00000000, 0x3fe00000
 
 END(__kernel_log2)
+
+
