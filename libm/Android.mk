@@ -233,6 +233,8 @@ LOCAL_SRC_FILES_arm += \
     upstream-freebsd/lib/msun/src/s_ceilf.c \
     upstream-freebsd/lib/msun/src/s_expm1.c \
     upstream-freebsd/lib/msun/src/s_floorf.c \
+    upstream-freebsd/lib/msun/src/s_fma.c \
+    upstream-freebsd/lib/msun/src/s_fmaf.c \
     upstream-freebsd/lib/msun/src/s_fmax.c \
     upstream-freebsd/lib/msun/src/s_fmaxf.c \
     upstream-freebsd/lib/msun/src/s_fmin.c \
@@ -242,6 +244,8 @@ LOCAL_SRC_FILES_arm += \
     upstream-freebsd/lib/msun/src/s_llround.c \
     upstream-freebsd/lib/msun/src/s_llroundf.c \
     upstream-freebsd/lib/msun/src/s_log1p.c \
+    upstream-freebsd/lib/msun/src/s_lrint.c \
+    upstream-freebsd/lib/msun/src/s_lrintf.c \
     upstream-freebsd/lib/msun/src/s_lround.c \
     upstream-freebsd/lib/msun/src/s_lroundf.c \
     upstream-freebsd/lib/msun/src/s_rint.c \
@@ -275,10 +279,6 @@ LOCAL_SRC_FILES_arm += \
     upstream-freebsd/lib/msun/src/s_floor.c \
     upstream-freebsd/lib/msun/src/s_fabs.c \
     upstream-freebsd/lib/msun/src/s_fabsf.c \
-    upstream-freebsd/lib/msun/src/s_fma.c \
-    upstream-freebsd/lib/msun/src/s_fmaf.c \
-    upstream-freebsd/lib/msun/src/s_lrint.c \
-    upstream-freebsd/lib/msun/src/s_lrintf.c \
     upstream-freebsd/lib/msun/src/s_sin.c \
 
 else
@@ -288,12 +288,11 @@ LOCAL_SRC_FILES_arm += \
     arm/exp.S \
     arm/fabs.S \
     arm/floor.S \
-    arm/fma.S \
     arm/log.S \
     arm/log2_kernel.S \
-    arm/lrint.S \
     arm/pow.S \
     arm/pow2_kernel.S \
+    arm/rem_pio2.S \
     arm/rem_pio2_kernel.S \
     arm/sin.S \
     arm/sqrt.S \
