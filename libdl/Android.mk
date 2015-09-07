@@ -35,4 +35,18 @@ LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 LOCAL_ALLOW_UNDEFINED_SYMBOLS := true
 LOCAL_SYSTEM_SHARED_LIBRARIES :=
 
+LOCAL_ADDRESS_SANITIZER := false
 include $(BUILD_SHARED_LIBRARY)
+
+# A dummy libdl.a. Need for static executables using the LLVM unwinder. Most
+# functions default to failure, others use a sensible default (dl_iterate_phdr()
+# returns 0, as would happen if the user iterated over every phdr).
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES:= libdl.c
+LOCAL_CFLAGS := -Wall -Wextra -Wunused -Werror
+LOCAL_CXX_STL := none
+
+LOCAL_MODULE := libdl
+LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
+LOCAL_ADDRESS_SANITIZER := false
+include $(BUILD_STATIC_LIBRARY)

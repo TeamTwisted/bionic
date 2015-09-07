@@ -24,8 +24,14 @@ libc_openbsd_src_files_arm += \
 
 libc_bionic_src_files_arm += \
     bionic/memrchr.c \
-    bionic/strchr.cpp \
     bionic/strnlen.c \
+
+libc_darwin_src_files_arm += \
+    upstream-darwin/lib/libc/string/stpncpy.c \
+    upstream-darwin/lib/libc/string/strlcat.c \
+    upstream-darwin/lib/libc/string/strlcpy.c \
+    upstream-darwin/lib/libc/string/strncat.c \
+    upstream-darwin/lib/libc/string/strncpy.c \
 
 libc_freebsd_src_files_arm += \
     upstream-freebsd/lib/libc/string/wcscat.c \
@@ -38,12 +44,7 @@ libc_freebsd_src_files_arm += \
     upstream-freebsd/lib/libc/string/wmemmove.c \
 
 libc_openbsd_src_files_arm += \
-    upstream-openbsd/lib/libc/string/stpncpy.c \
-    upstream-openbsd/lib/libc/string/strlcat.c \
-    upstream-openbsd/lib/libc/string/strlcpy.c \
-    upstream-openbsd/lib/libc/string/strncat.c \
     upstream-openbsd/lib/libc/string/strncmp.c \
-    upstream-openbsd/lib/libc/string/strncpy.c \
 
 #
 # Inherently architecture-specific code.
@@ -61,8 +62,8 @@ libc_bionic_src_files_arm += \
     arch-arm/bionic/setjmp.S \
     arch-arm/bionic/sigsetjmp.S \
     arch-arm/bionic/syscall.S \
-    arch-arm/bionic/idiv.S \
-    arch-arm/bionic/strrchr.S
+    arch-arm/bionic/strchr.S \
+    arch-arm/bionic/strrchr.S \
 
 libc_arch_static_src_files_arm := arch-arm/bionic/exidx_static.c
 libc_arch_dynamic_src_files_arm := arch-arm/bionic/exidx_dynamic.c
@@ -74,7 +75,7 @@ endif
 
 ifeq ($(filter cortex-a9 cortex-a53 denver krait scorpion, $(strip $(TARGET_$(my_2nd_arch_prefix)CPU_VARIANT))),)
 libc_bionic_src_files_arm += \
-    upstream-openbsd/lib/libc/string/stpcpy.c
+    upstream-darwin/lib/libc/string/stpcpy.c
 endif
 
 ifeq ($(filter cortex-a53 krait scorpion, $(strip $(TARGET_$(my_2nd_arch_prefix)CPU_VARIANT))),)

@@ -15,6 +15,10 @@ libc_bionic_src_files_x86_64 += \
     bionic/strnlen.c \
     bionic/strrchr.cpp \
 
+libc_darwin_src_files_x86_64 += \
+    upstream-darwin/lib/libc/string/strlcat.c \
+    upstream-darwin/lib/libc/string/strlcpy.c \
+
 libc_freebsd_src_files_x86_64 += \
     upstream-freebsd/lib/libc/string/wcscat.c \
     upstream-freebsd/lib/libc/string/wcschr.c \
@@ -24,10 +28,6 @@ libc_freebsd_src_files_x86_64 += \
     upstream-freebsd/lib/libc/string/wcsrchr.c \
     upstream-freebsd/lib/libc/string/wmemcmp.c \
     upstream-freebsd/lib/libc/string/wmemmove.c \
-
-libc_openbsd_src_files_x86_64 += \
-    upstream-openbsd/lib/libc/string/strlcat.c \
-    upstream-openbsd/lib/libc/string/strlcpy.c \
 
 #
 # Inherently architecture-specific code.
