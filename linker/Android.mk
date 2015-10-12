@@ -33,6 +33,10 @@ LOCAL_LDFLAGS := \
 
 LOCAL_CFLAGS += \
     -fno-stack-protector \
+    -fno-builtin-malloc \
+    -fno-builtin-calloc \
+    -fno-builtin-realloc \
+    -fno-builtin-free \
     -Wstrict-overflow=5 \
     -fvisibility=hidden \
     -Wall -Wextra -Wunused -Werror \
