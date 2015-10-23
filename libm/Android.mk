@@ -477,6 +477,7 @@ LOCAL_ARM_MODE := arm
 LOCAL_CFLAGS := \
     -DFLT_EVAL_METHOD=0 \
     -include $(LOCAL_PATH)/freebsd-compat.h \
+    -Werror \
     -Wno-missing-braces \
     -Wno-parentheses \
     -Wno-sign-compare \
