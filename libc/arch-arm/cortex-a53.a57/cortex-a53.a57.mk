@@ -1,3 +1,8 @@
+# This file represents the best optimized routines that are the middle
+# ground when running on a big/little system that is cortex-a57/cortex-a53.
+# The cortex-a7 optimized routines, and the cortex-a53 optimized routines
+# decrease performance on cortex-a57 processors by as much as 20%.
+
 libc_bionic_src_files_arm += \
     arch-arm/cortex-a15/bionic/memcpy.S \
     arch-arm/cortex-a15/bionic/memset.S \
@@ -10,7 +15,6 @@ libc_bionic_src_files_arm += \
     arch-arm/cortex-a15/bionic/strlen.S \
 
 libc_bionic_src_files_arm += \
-    arch-arm/generic/bionic/memchr.S \
     arch-arm/generic/bionic/memcmp.S \
 
 libc_bionic_src_files_arm += \

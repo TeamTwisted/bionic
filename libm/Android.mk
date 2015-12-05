@@ -282,9 +282,8 @@ LOCAL_SRC_FILES_arm += \
 
 else
 LOCAL_SRC_FILES_arm += \
-    arm/e_sqrt.S \
-    arm/e_sqrtf.S \
-    arm/s_floor.S \
+    arm/sqrt.S \
+    arm/floor.S \
 
 endif
 
@@ -483,6 +482,7 @@ LOCAL_ARM_MODE := arm
 LOCAL_CFLAGS := \
     -DFLT_EVAL_METHOD=0 \
     -include $(LOCAL_PATH)/freebsd-compat.h \
+    -Werror \
     -Wno-missing-braces \
     -Wno-parentheses \
     -Wno-sign-compare \
